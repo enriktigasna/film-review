@@ -1,17 +1,20 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
+const cors = require('cors');
 const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors());
 
 app.use(express.json());
 
 // Route to create a movie
 app.post('/movies', async (req, res) => {
-  const { movieName, director } = req.body;
+  const { name, director } = req.body;
   try {
     const movie = await prisma.movie.create({
-      data: { movieName, director }
+      data: { name, director }
     });
     res.json(movie);
   } catch (error) {
@@ -31,6 +34,31 @@ app.post('/reviews', async (req, res) => {
   } catch (error) {
     console.error('Failed to create a review:', error);
     res.status(500).send('Failed to create a review');
+  }
+});
+
+// Route to create a director
+app.post('/directors', async (req, res) => {
+  const { name } = req.body;
+  try {
+    const director = await prisma.director.create({
+      data: { name }
+    });
+    res.json(director);
+  } catch (error) {
+    console.error('Failed to create a director:', error);
+    res.status(500).send('Failed to create a director');
+  }
+});
+
+// Route to get all directors
+app.get('/directors', async (req, res) => {
+  try {
+    const directors = await prisma.director.findMany();
+    res.json(directors);
+  } catch (error) {
+    console.error('Failed to retrieve directors:', error);
+    res.status(500).send('Failed to retrieve directors');
   }
 });
 
@@ -75,7 +103,19 @@ app.get('/reviews/user', async (req, res) => {
   }
 });
 
-
+// Route to delete director
+app.delete('/directors/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const director = await prisma.director.delete({
+      where: { id: parseInt(id) }
+    });
+    res.json(director);
+  } catch (error) {
+    console.error('Failed to delete director:', error);
+    res.status(500).send('Failed to delete director');
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

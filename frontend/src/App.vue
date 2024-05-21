@@ -13,8 +13,9 @@ import { RouterLink, RouterView } from 'vue-router'
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <RouterLink to="/" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</RouterLink>
-              <RouterLink to="/about" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</RouterLink>
-              <RouterLink to="/contact" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</RouterLink>
+              <RouterLink to="/reviews" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Reviews</RouterLink>
+              <RouterLink to="/users" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Users</RouterLink>
+              <RouterLink to="/directors" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Directors</RouterLink>
             </div>
           </div>
         </div>
