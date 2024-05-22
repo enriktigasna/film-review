@@ -29,7 +29,7 @@ export default {
         <div class="max-w-full rounded overflow-hidden border-gray-400 border p-4 shadow-sm" v-for="review in reviews">
             <a :href="'/movies/' + review.Movie.id"><div class="text-lg font-semibold text-blue-700">{{ review.Movie.name }}</div></a>
             <div class="text-sm text-gray-600">{{ review.score }}/5 Stars</div>
-            <div class="text-md text-gray-800 font-semibold">{{ review.name }}</div>
+            <a :href="'/users/' + review.name"><div class="text-md text-gray-800 font-semibold">{{ review.name }}</div></a>
             <div class="text-gray-900">{{ review.review }}</div>
         </div>
       </div>

@@ -54,7 +54,7 @@ export default {
         <section class="flex flex-col items-center sm:flex-row mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">{{ movie.name }}</h1>
-                <div class="text-lg font-semibold text-gray-600">Directed by {{ movie.Director.name }}</div>
+                <a :href="'/directors/' + movie.Director.id"><div class="text-lg font-semibold text-gray-600">Directed by {{ movie.Director.name }}</div></a>
             </div>
         </section>
         <section>
@@ -71,7 +71,7 @@ export default {
                         <img class="w-16 h-16 rounded-full shadow-sm"
                             :src="'https://i.pravatar.cc/300/?u=' + review.name" alt="">
                         <div>
-                            <div class="font-medium text-gray-900">{{ review.name }}</div>
+                            <a :href="'/users/' + review.name"><div class="font-semibold text-gray-900">{{ review.name }}</div></a>
                             <div class="text-yellow-500">{{ review.score }}/5</div>
                             <div class="text-gray-600">{{ review.review }}</div>
                         </div>

@@ -109,6 +109,22 @@ app.get("/movies", async (req, res) => {
   }
 });
 
+app.get("/directors/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const director = await prisma.director.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        movies: true,
+      },
+    });
+    res.json(director);
+  } catch (error) {
+    console.error("Failed to retrieve director:", error);
+    res.status(500).send("Failed to retrieve director");
+  }
+});
+
 // Route to get all reviews (paginated)
 app.get("/reviews", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -129,11 +145,14 @@ app.get("/reviews", async (req, res) => {
 });
 
 // Route to get reviews by user
-app.get("/reviews/user", async (req, res) => {
-  const { name } = req.query;
+app.get("/users/:name", async (req, res) => {
+  const { name } = req.params;
   try {
     const reviews = await prisma.review.findMany({
       where: { name },
+      include: {
+        Movie: true,
+      },
     });
     res.json(reviews);
   } catch (error) {
