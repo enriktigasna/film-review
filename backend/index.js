@@ -176,6 +176,10 @@ app.get("/movies/:id", async (req, res) => {
   try {
     const movie = await prisma.movie.findUnique({
       where: { id: parseInt(id) },
+      include: {
+        Director: true,
+        reviews: true,
+      }
     });
     res.json(movie);
   } catch (error) {
