@@ -23,6 +23,11 @@ const router = createRouter({
       path: '/directors',
       name: 'directors',
       component: () => import('../views/DirectorsView.vue')
+    },
+    {
+      path: '/movies/:id',
+      name: 'movie',
+      component: () => import('../views/MovieView.vue')
     }
   ]
 })
