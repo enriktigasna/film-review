@@ -25,10 +25,22 @@ app.post('/movies', async (req, res) => {
 
 // Route to create a review
 app.post('/reviews', async (req, res) => {
-  const { review, name, score, movieId } = req.body;
+  const { review, name, score, movie } = req.body;
+
+  if (score < 1 || score > 5) {
+    res.status(400).send('Invalid score. Score must be between 1 and 5.');
+    return;
+  }
   try {
     const newReview = await prisma.review.create({
-      data: { review, name, score, movie: movieId }
+      data: {
+        review: review,
+        name: name,
+        score: score,
+        Movie: {
+          connect: { id: movie }
+        }
+      }
     });
     res.json(newReview);
   } catch (error) {
@@ -65,7 +77,11 @@ app.get('/directors', async (req, res) => {
 // Route to get all movies
 app.get('/movies', async (req, res) => {
   try {
-    const movies = await prisma.movie.findMany();
+    const movies = await prisma.movie.findMany({
+      include: {
+        Director: true
+      }
+    });
     res.json(movies);
   } catch (error) {
     console.error('Failed to retrieve movies:', error);
@@ -79,6 +95,9 @@ app.get('/reviews', async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 10;
   try {
     const reviews = await prisma.review.findMany({
+      include: {
+        Movie: true
+      },
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
@@ -116,6 +135,49 @@ app.delete('/directors/:id', async (req, res) => {
     res.status(500).send('Failed to delete director');
   }
 });
+
+// Route to delete movie
+app.delete('/movies/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const movie = await prisma.movie.delete({
+      where: { id: parseInt(id) }
+    });
+    res.json(movie);
+  } catch (error) {
+    console.error('Failed to delete movie:', error);
+    res.status(500).send('Failed to delete movie');
+  }
+});
+
+// Route to get one movie
+app.get('/movies/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const movie = await prisma.movie.findUnique({
+      where: { id: parseInt(id) }
+    });
+    res.json(movie);
+  } catch (error) {
+    console.error('Failed to retrieve movie:', error);
+    res.status(500).send('Failed to retrieve movie');
+  }
+});
+
+// Route to delete review
+app.delete('/reviews/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const review = await prisma.review.delete({
+      where: { id: parseInt(id) }
+    });
+    res.json(review);
+  } catch (error) {
+    console.error('Failed to delete review:', error);
+    res.status(500).send('Failed to delete review');
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
